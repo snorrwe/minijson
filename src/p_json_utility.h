@@ -23,7 +23,6 @@ template <typename T> struct Type
 {
 };
 
-// sequence for
 template <typename T, T... S, typename F>
 constexpr void for_sequence(std::integer_sequence<T, S...>, F&& f)
 {

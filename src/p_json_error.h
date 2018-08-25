@@ -15,7 +15,7 @@ struct ParseError : public std::exception
     ParseError(ParseError const&) = default;
     ParseError& operator=(ParseError const&) = default;
 
-    const char* what() const override
+    virtual const char* what() const noexcept override
     {
         return message.c_str();
     }

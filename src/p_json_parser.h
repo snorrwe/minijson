@@ -212,8 +212,8 @@ template <typename FwIt> template <typename TResult> TResult ParseImpl<FwIt>::pa
     skip_until([](auto c) { return !is_white_space(c); });
     auto stream = std::stringstream{};
     stream << *begin++;
-    while (begin != end &&
-           ((is_number(*begin) || *begin == '.') && !is_value_end(*begin) && !is_white_space(*begin)))
+    while (begin != end && ((is_number(*begin) || *begin == '.') && !is_value_end(*begin) &&
+                            !is_white_space(*begin)))
     {
         stream << *begin;
         ++begin;

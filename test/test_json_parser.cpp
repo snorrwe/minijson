@@ -109,7 +109,7 @@ TEST_F(TestJsonParser, CanReadObjectWithVectorOfObjects)
 
     auto result = mini_json::parse<AppleTree>(json.begin(), json.end());
 
-    ASSERT_EQ(result.apples.size(), 5);
+    ASSERT_EQ(result.apples.size(), 5u);
 
     float i = 0.0;
     for (auto& apple : result.apples)
@@ -148,7 +148,7 @@ TEST_F(TestJsonParser, CanReadVectorOfObjectsWithVectors)
 
     auto result = mini_json::parse<Orchid>(json.begin(), json.end());
 
-    EXPECT_EQ(result.trees.size(), 2);
+    EXPECT_EQ(result.trees.size(), 2u);
 }
 
 TEST_F(TestJsonParser, RaisesExceptionIfNonExistentPropertyIsRead)
@@ -172,7 +172,7 @@ TEST_F(TestJsonParser, CanParseStreams)
 
     auto result = mini_json::parse<AppleTree>(stream);
 
-    ASSERT_EQ(result.apples.size(), 5);
+    ASSERT_EQ(result.apples.size(), 5u);
 
     float i = 0;
     for (auto& apple : result.apples)
