@@ -2,8 +2,10 @@
 #include <stdexcept>
 #include <string>
 
-namespace Mino::Json {
-struct ParseError : public std::exception {
+namespace MiniJson
+{
+struct ParseError : public std::exception
+{
     std::string message;
 
     ParseError(std::string msg)
@@ -13,10 +15,14 @@ struct ParseError : public std::exception {
     ParseError(ParseError const&) = default;
     ParseError& operator=(ParseError const&) = default;
 
-    const char* what() const override { return message.c_str(); }
+    const char* what() const override
+    {
+        return message.c_str();
+    }
 };
 
-struct UnexpectedPropertyName : public ParseError {
+struct UnexpectedPropertyName : public ParseError
+{
     UnexpectedPropertyName(std::string msg)
         : ParseError(std::move(msg))
     {
@@ -24,5 +30,5 @@ struct UnexpectedPropertyName : public ParseError {
     UnexpectedPropertyName(UnexpectedPropertyName const&) = default;
     UnexpectedPropertyName& operator=(UnexpectedPropertyName const&) = default;
 };
-}
+} // namespace MiniJson
 

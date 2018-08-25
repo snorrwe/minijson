@@ -4,11 +4,11 @@
 #include <iomanip>
 #include <sstream>
 #include <string>
+#include <vector>
 
-namespace Mino::Json::Private
+namespace MiniJson::Private
 {
-template <typename TStream>
-class SerializerImpl
+template <typename TStream> class SerializerImpl
 {
     TStream& stream;
 
@@ -18,8 +18,7 @@ public:
     {
     }
 
-    template <typename T>
-    void serialize(T const& item)
+    template <typename T> void serialize(T const& item)
     {
         stream << "{";
 
@@ -38,8 +37,7 @@ public:
         stream << "}";
     }
 
-    template <typename T>
-    void serialize(std::vector<T> const& items)
+    template <typename T> void serialize(std::vector<T> const& items)
     {
         stream << "[";
         const char* separator = "";
@@ -52,10 +50,26 @@ public:
         stream << "]";
     }
 
-    void serialize(std::string const& item) { stream << std::quoted(item); }
-    void serialize(int item) { stream << item; }
-    void serialize(unsigned item) { stream << item; }
-    void serialize(float item) { stream << item; }
-    void serialize(double item) { stream << item; }
+    void serialize(std::string const& item)
+    {
+        stream << std::quoted(item);
+    }
+    void serialize(int item)
+    {
+        stream << item;
+    }
+    void serialize(unsigned item)
+    {
+        stream << item;
+    }
+    void serialize(float item)
+    {
+        stream << item;
+    }
+    void serialize(double item)
+    {
+        stream << item;
+    }
 };
-}
+} // namespace MiniJson::Private
+

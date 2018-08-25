@@ -3,10 +3,9 @@
 #include <string>
 #include <tuple>
 
-namespace Mino::Json::Private
+namespace MiniJson::Private
 {
-template <typename Class, typename T>
-struct PropertyImpl
+template <typename Class, typename T> struct PropertyImpl
 {
     constexpr PropertyImpl(T Class::*aMember, const char* aName)
         : member{aMember}
@@ -20,8 +19,7 @@ struct PropertyImpl
     const char* name;
 };
 
-template <typename T>
-struct Type
+template <typename T> struct Type
 {
 };
 
@@ -37,13 +35,13 @@ constexpr auto strEqual(const char* lhs, const char* rhs)
 {
     for (; *lhs && *rhs; ++lhs, ++rhs)
     {
-        if (*lhs != *rhs) return false;
+        if (*lhs != *rhs)
+            return false;
     }
     return *lhs == *rhs;
 }
 
-template <typename T, typename Fun>
-constexpr void executeByPropertyName(const char* name, Fun&& f)
+template <typename T, typename Fun> constexpr void executeByPropertyName(const char* name, Fun&& f)
 {
     constexpr auto nbProperties = std::tuple_size<decltype(T::jsonProperties())>::value;
     auto found = false;
@@ -61,8 +59,7 @@ constexpr void executeByPropertyName(const char* name, Fun&& f)
     }
 }
 
-template <typename T>
-class IsJsonParseble
+template <typename T> class IsJsonParseble
 {
     using Yes = char;
     struct No
@@ -70,8 +67,7 @@ class IsJsonParseble
         char _[2];
     };
 
-    template <typename C>
-    static Yes test(decltype(&C::jsonProperties));
+    template <typename C> static Yes test(decltype(&C::jsonProperties));
     static No test(...);
 
 public:
@@ -80,4 +76,5 @@ public:
         value = sizeof(test<T>(nullptr)) == sizeof(Yes)
     };
 };
-}
+} // namespace MiniJson::Private
+

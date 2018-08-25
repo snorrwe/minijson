@@ -4,7 +4,7 @@
 #include <sstream>
 #include <string>
 
-using namespace Mino;
+using namespace MiniJson;
 using namespace std::string_literals;
 
 namespace {
@@ -14,8 +14,8 @@ struct Apple {
 
     constexpr static auto jsonProperties()
     {
-        return std::make_tuple(Json::property(&Apple::color, "color"),
-            Json::property(&Apple::size, "size"));
+        return std::make_tuple(MiniJson::property(&Apple::color, "color"),
+            MiniJson::property(&Apple::size, "size"));
     }
 
     bool operator==(Apple const& t) const { return color == t.color && size == t.size; }
@@ -28,8 +28,8 @@ struct AppleTree {
 
     constexpr static auto jsonProperties()
     {
-        return std::make_tuple(Json::property(&AppleTree::apples, "apples"),
-            Json::property(&AppleTree::id, "id"));
+        return std::make_tuple(MiniJson::property(&AppleTree::apples, "apples"),
+            MiniJson::property(&AppleTree::id, "id"));
     }
 
     bool operator==(AppleTree const& t) const
@@ -61,17 +61,17 @@ public:
 TEST_F(TestJsonSerializer, DoesSerialize)
 {
     auto result = std::stringstream();
-    Json::serialize(tree, result);
+    MiniJson::serialize(tree, result);
     EXPECT_FALSE(result.str().empty());
 }
 
 TEST_F(TestJsonSerializer, ParsedSerializationEqualsOriginal)
 {
     auto json = std::stringstream();
-    Json::serialize(tree, json);
+    MiniJson::serialize(tree, json);
 
     auto jsonStr = json.str();
-    auto result = Json::parse<AppleTree>(jsonStr.begin(), jsonStr.end());
+    auto result = MiniJson::parse<AppleTree>(jsonStr.begin(), jsonStr.end());
     EXPECT_EQ(result, tree);
 }
 }
