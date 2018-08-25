@@ -7,7 +7,7 @@
 #include <tuple>
 #include <vector>
 
-namespace MiniJson::Private
+namespace mini_json::_private
 {
 template <typename FwIt> class ParseImpl
 {
@@ -25,15 +25,15 @@ template <typename FwIt> class ParseImpl
 public:
     using ParseState = ParseState;
 
-    static bool isNumber(char c)
+    static bool is_number(char c)
     {
         return '0' <= c && c <= '9';
     }
-    static bool isWhiteSpace(char c)
+    static bool is_white_space(char c)
     {
         return c == ' ' || c == '\t' || c == '\n';
     }
-    static bool isValueEnd(char c)
+    static bool is_value_end(char c)
     {
         return c == ',';
     }
@@ -55,11 +55,11 @@ public:
     std::string parse(Type<std::string>);
 
 private:
-    template <typename TResult> TResult parseFloat();
-    void throwUnexpectedCharacter(char chr);
-    template <typename Fun> void skipUntil(Fun&& predicate);
+    template <typename TResult> TResult parse_float();
+    void throw_unexpected_character(char chr);
+    template <typename Fun> void skip_until(Fun&& predicate);
     template <typename T> void init();
-    void assertCorrectValueEnd(char ending);
+    void assert_correct_value_end(char ending);
 };
 
 template <typename FwIt> template <typename T> T ParseImpl<FwIt>::parse(Type<T>)
@@ -72,7 +72,7 @@ template <typename FwIt> template <typename T> T ParseImpl<FwIt>::parse(Type<T>)
         switch (state)
         {
         case ParseState::Default:
-            skipUntil([](auto c) { return !isWhiteSpace(c); });
+            skip_until([](auto c) { return !is_white_space(c); });
             if (*begin == '"')
             {
                 state = ParseState::Key;
@@ -84,7 +84,7 @@ template <typename FwIt> template <typename T> T ParseImpl<FwIt>::parse(Type<T>)
             }
             else
             {
-                throwUnexpectedCharacter(*begin);
+                throw_unexpected_character(*begin);
             }
             break;
         case ParseState::Key:
@@ -92,10 +92,10 @@ template <typename FwIt> template <typename T> T ParseImpl<FwIt>::parse(Type<T>)
             {
                 state = ParseState::Value;
                 ++begin;
-                skipUntil([](auto c) { return !isWhiteSpace(c); });
+                skip_until([](auto c) { return !is_white_space(c); });
                 if (*begin != ':')
                 {
-                    throwUnexpectedCharacter(*begin);
+                    throw_unexpected_character(*begin);
                 }
             }
             else
@@ -111,8 +111,8 @@ template <typename FwIt> template <typename T> T ParseImpl<FwIt>::parse(Type<T>)
             });
             state = ParseState::Default;
             key.clear();
-            skipUntil([](auto c) { return !isWhiteSpace(c); });
-            assertCorrectValueEnd('}');
+            skip_until([](auto c) { return !is_white_space(c); });
+            assert_correct_value_end('}');
             continue;
         }
         ++begin;
@@ -124,18 +124,18 @@ template <typename FwIt>
 template <typename T>
 std::vector<T> ParseImpl<FwIt>::parse(Type<std::vector<T>>)
 {
-    skipUntil([](auto c) { return !isWhiteSpace(c); });
+    skip_until([](auto c) { return !is_white_space(c); });
     if (*begin != '[')
     {
-        throwUnexpectedCharacter(*begin);
+        throw_unexpected_character(*begin);
     }
     ++begin;
     auto result = std::vector<T>{};
     while (*begin != ']')
     {
         result.push_back(parse(Type<T>{}));
-        skipUntil([](auto c) { return !isWhiteSpace(c); });
-        assertCorrectValueEnd(']');
+        skip_until([](auto c) { return !is_white_space(c); });
+        assert_correct_value_end(']');
     }
     ++begin;
     return result;
@@ -143,10 +143,10 @@ std::vector<T> ParseImpl<FwIt>::parse(Type<std::vector<T>>)
 
 template <typename FwIt> int ParseImpl<FwIt>::parse(Type<int>)
 {
-    skipUntil([](auto c) { return !isWhiteSpace(c); });
+    skip_until([](auto c) { return !is_white_space(c); });
     auto stream = std::stringstream{};
     stream << *begin++;
-    if (isNumber(*begin))
+    if (is_number(*begin))
     {
         stream << parse(Type<unsigned>{});
     }
@@ -157,9 +157,9 @@ template <typename FwIt> int ParseImpl<FwIt>::parse(Type<int>)
 
 template <typename FwIt> unsigned ParseImpl<FwIt>::parse(Type<unsigned>)
 {
-    skipUntil([](auto c) { return !isWhiteSpace(c); });
+    skip_until([](auto c) { return !is_white_space(c); });
     auto stream = std::stringstream{};
-    while (begin != end && (isNumber(*begin) && !isValueEnd(*begin) && !isWhiteSpace(*begin)))
+    while (begin != end && (is_number(*begin) && !is_value_end(*begin) && !is_white_space(*begin)))
     {
         stream << *begin;
         ++begin;
@@ -171,24 +171,24 @@ template <typename FwIt> unsigned ParseImpl<FwIt>::parse(Type<unsigned>)
 
 template <typename FwIt> float ParseImpl<FwIt>::parse(Type<float>)
 {
-    return parseFloat<float>();
+    return parse_float<float>();
 }
 
 template <typename FwIt> double ParseImpl<FwIt>::parse(Type<double>)
 {
-    return parseFloat<double>();
+    return parse_float<double>();
 }
 
 template <typename FwIt> std::string ParseImpl<FwIt>::parse(Type<std::string>)
 {
-    skipUntil([](auto c) { return !isWhiteSpace(c); });
+    skip_until([](auto c) { return !is_white_space(c); });
     if (*begin == '"')
     {
         ++begin;
     }
     else
     {
-        throwUnexpectedCharacter(*begin);
+        throw_unexpected_character(*begin);
     }
     auto stream = std::stringstream{};
     stream << "\"";
@@ -207,13 +207,13 @@ template <typename FwIt> std::string ParseImpl<FwIt>::parse(Type<std::string>)
     return result;
 }
 
-template <typename FwIt> template <typename TResult> TResult ParseImpl<FwIt>::parseFloat()
+template <typename FwIt> template <typename TResult> TResult ParseImpl<FwIt>::parse_float()
 {
-    skipUntil([](auto c) { return !isWhiteSpace(c); });
+    skip_until([](auto c) { return !is_white_space(c); });
     auto stream = std::stringstream{};
     stream << *begin++;
     while (begin != end &&
-           ((isNumber(*begin) || *begin == '.') && !isValueEnd(*begin) && !isWhiteSpace(*begin)))
+           ((is_number(*begin) || *begin == '.') && !is_value_end(*begin) && !is_white_space(*begin)))
     {
         stream << *begin;
         ++begin;
@@ -223,12 +223,12 @@ template <typename FwIt> template <typename TResult> TResult ParseImpl<FwIt>::pa
     return result;
 }
 
-template <typename FwIt> void ParseImpl<FwIt>::throwUnexpectedCharacter(char chr)
+template <typename FwIt> void ParseImpl<FwIt>::throw_unexpected_character(char chr)
 {
     throw ParseError("Unexpected character: ["s + chr + "] in json input!");
 }
 
-template <typename FwIt> template <typename Fun> void ParseImpl<FwIt>::skipUntil(Fun&& predicate)
+template <typename FwIt> template <typename Fun> void ParseImpl<FwIt>::skip_until(Fun&& predicate)
 {
     auto result = begin == end || predicate(*begin);
     while (!result)
@@ -244,18 +244,18 @@ template <typename FwIt> template <typename Fun> void ParseImpl<FwIt>::skipUntil
 
 template <typename FwIt> template <typename T> void ParseImpl<FwIt>::init()
 {
-    static_assert(Private::IsJsonParseble<T>::value,
+    static_assert(_private::IsJsonParseble<T>::value,
                   "Type must specify 'jsonProperties' static member "
                   "function to be used in this context!");
     state = ParseState::Default;
-    skipUntil([](auto c) { return !isWhiteSpace(c); });
+    skip_until([](auto c) { return !is_white_space(c); });
     if (*begin != '{')
     {
-        throwUnexpectedCharacter(*begin);
+        throw_unexpected_character(*begin);
     }
     ++begin;
 }
-template <typename FwIt> void ParseImpl<FwIt>::assertCorrectValueEnd(char ending)
+template <typename FwIt> void ParseImpl<FwIt>::assert_correct_value_end(char ending)
 {
     if (*begin == ',')
     {
@@ -263,8 +263,8 @@ template <typename FwIt> void ParseImpl<FwIt>::assertCorrectValueEnd(char ending
     }
     else if (*begin != ending)
     {
-        throwUnexpectedCharacter(*begin);
+        throw_unexpected_character(*begin);
     }
 }
-} // namespace MiniJson::Private
+} // namespace mini_json::_private
 

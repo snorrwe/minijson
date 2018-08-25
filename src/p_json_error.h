@@ -2,7 +2,7 @@
 #include <stdexcept>
 #include <string>
 
-namespace MiniJson
+namespace mini_json
 {
 struct ParseError : public std::exception
 {
@@ -30,5 +30,5 @@ struct UnexpectedPropertyName : public ParseError
     UnexpectedPropertyName(UnexpectedPropertyName const&) = default;
     UnexpectedPropertyName& operator=(UnexpectedPropertyName const&) = default;
 };
-} // namespace MiniJson
+} // namespace mini_json
 

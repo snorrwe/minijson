@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-namespace MiniJson::Private
+namespace mini_json::_private
 {
 template <typename TStream> class SerializerImpl
 {
@@ -71,5 +71,5 @@ public:
         stream << item;
     }
 };
-} // namespace MiniJson::Private
+} // namespace mini_json::_private
 

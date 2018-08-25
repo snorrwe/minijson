@@ -3,7 +3,7 @@
 #include <string>
 #include <tuple>
 
-namespace MiniJson::Private
+namespace mini_json::_private
 {
 template <typename Class, typename T> struct PropertyImpl
 {
@@ -31,7 +31,7 @@ constexpr void for_sequence(std::integer_sequence<T, S...>, F&& f)
     (void)unpack_t{(static_cast<void>(f(std::integral_constant<T, S>{})), 0)..., 0};
 }
 
-constexpr auto strEqual(const char* lhs, const char* rhs)
+constexpr auto str_equal(const char* lhs, const char* rhs)
 {
     for (; *lhs && *rhs; ++lhs, ++rhs)
     {
@@ -43,11 +43,11 @@ constexpr auto strEqual(const char* lhs, const char* rhs)
 
 template <typename T, typename Fun> constexpr void executeByPropertyName(const char* name, Fun&& f)
 {
-    constexpr auto nbProperties = std::tuple_size<decltype(T::jsonProperties())>::value;
+    constexpr auto n_properties = std::tuple_size<decltype(T::jsonProperties())>::value;
     auto found = false;
-    for_sequence(std::make_index_sequence<nbProperties>{}, [&](auto i) {
+    for_sequence(std::make_index_sequence<n_properties>{}, [&](auto i) {
         constexpr auto property = std::get<i>(T::jsonProperties());
-        if (strEqual(property.name, name))
+        if (str_equal(property.name, name))
         {
             found = true;
             f(property);
@@ -76,5 +76,5 @@ public:
         value = sizeof(test<T>(nullptr)) == sizeof(Yes)
     };
 };
-} // namespace MiniJson::Private
+} // namespace mini_json::_private
 

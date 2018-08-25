@@ -4,7 +4,7 @@
 #include <sstream>
 #include <string>
 
-using namespace MiniJson;
+using namespace mini_json;
 using namespace std::string_literals;
 
 namespace
@@ -17,10 +17,10 @@ TEST(TestJsonSetter, TestStrEqual)
     auto phrase4 = "red123";
     auto phrase5 = "re";
 
-    EXPECT_TRUE(MiniJson::Private::strEqual(phrase1, phrase2));
-    EXPECT_FALSE(MiniJson::Private::strEqual(phrase1, phrase3));
-    EXPECT_FALSE(MiniJson::Private::strEqual(phrase1, phrase4));
-    EXPECT_FALSE(MiniJson::Private::strEqual(phrase1, phrase5));
+    EXPECT_TRUE(mini_json::_private::str_equal(phrase1, phrase2));
+    EXPECT_FALSE(mini_json::_private::str_equal(phrase1, phrase3));
+    EXPECT_FALSE(mini_json::_private::str_equal(phrase1, phrase4));
+    EXPECT_FALSE(mini_json::_private::str_equal(phrase1, phrase5));
 }
 
 struct Seed
@@ -29,7 +29,7 @@ struct Seed
 
     constexpr static auto jsonProperties()
     {
-        return std::make_tuple(MiniJson::property(&Seed::radius, "radius"));
+        return std::make_tuple(mini_json::property(&Seed::radius, "radius"));
     }
 };
 
@@ -41,9 +41,9 @@ struct Apple
 
     constexpr static auto jsonProperties()
     {
-        return std::make_tuple(MiniJson::property(&Apple::color, "color"),
-                               MiniJson::property(&Apple::seed, "seed"),
-                               MiniJson::property(&Apple::size, "size"));
+        return std::make_tuple(mini_json::property(&Apple::color, "color"),
+                               mini_json::property(&Apple::seed, "seed"),
+                               mini_json::property(&Apple::size, "size"));
     }
 };
 
@@ -57,7 +57,7 @@ TEST_F(TestJsonParser, CanReadJsonIntoObject)
     const auto json
         = "     {\"color\":\"red\",\"size\": -25\n, \"seed\":   {\"radius\":        -3.14}}"s;
 
-    auto result = MiniJson::parse<Apple>(json.begin(), json.end());
+    auto result = mini_json::parse<Apple>(json.begin(), json.end());
 
     EXPECT_EQ(result.color, "red");
     EXPECT_EQ(result.size, -25);
@@ -68,7 +68,7 @@ TEST_F(TestJsonParser, CanReadQuotes)
 {
     const auto json = "{\"color\":\"\\\"red\\\"\",}"s;
 
-    auto result = MiniJson::parse<Apple>(json.begin(), json.end());
+    auto result = mini_json::parse<Apple>(json.begin(), json.end());
 
     EXPECT_EQ(result.color, "\"red\"");
 }
@@ -76,13 +76,13 @@ TEST_F(TestJsonParser, CanReadQuotes)
 TEST_F(TestJsonParser, ThrowsParseErrorOnInvalidJson)
 {
     auto json = "{asd \"color\": \"red\",\"size\": -25\n}"s;
-    EXPECT_THROW(MiniJson::parse<Apple>(json.begin(), json.end()), MiniJson::ParseError);
+    EXPECT_THROW(mini_json::parse<Apple>(json.begin(), json.end()), mini_json::ParseError);
 
     json = "{\"color\"asd: \"red\",\"size\": -25\n}"s;
-    EXPECT_THROW(MiniJson::parse<Apple>(json.begin(), json.end()), MiniJson::ParseError);
+    EXPECT_THROW(mini_json::parse<Apple>(json.begin(), json.end()), mini_json::ParseError);
 
     json = "{\"color\"asd: \"red\",\"size\": -2asd5\n}"s;
-    EXPECT_THROW(MiniJson::parse<Apple>(json.begin(), json.end()), MiniJson::ParseError);
+    EXPECT_THROW(mini_json::parse<Apple>(json.begin(), json.end()), mini_json::ParseError);
 }
 
 struct AppleTree
@@ -92,8 +92,8 @@ struct AppleTree
 
     constexpr static auto jsonProperties()
     {
-        return std::make_tuple(MiniJson::property(&AppleTree::apples, "apples"),
-                               MiniJson::property(&AppleTree::id, "id"));
+        return std::make_tuple(mini_json::property(&AppleTree::apples, "apples"),
+                               mini_json::property(&AppleTree::id, "id"));
     }
 };
 
@@ -107,7 +107,7 @@ TEST_F(TestJsonParser, CanReadObjectWithVectorOfObjects)
                       "{\"color\":\"red\",\"size\":4,\"seed\":{\"radius\":4}}"
                       "]}"s;
 
-    auto result = MiniJson::parse<AppleTree>(json.begin(), json.end());
+    auto result = mini_json::parse<AppleTree>(json.begin(), json.end());
 
     ASSERT_EQ(result.apples.size(), 5);
 
@@ -127,7 +127,7 @@ struct Orchid
 
     constexpr static auto jsonProperties()
     {
-        return std::make_tuple(MiniJson::property(&Orchid::trees, "trees"));
+        return std::make_tuple(mini_json::property(&Orchid::trees, "trees"));
     }
 };
 
@@ -146,7 +146,7 @@ TEST_F(TestJsonParser, CanReadVectorOfObjectsWithVectors)
                       " ]"
                       "}"s;
 
-    auto result = MiniJson::parse<Orchid>(json.begin(), json.end());
+    auto result = mini_json::parse<Orchid>(json.begin(), json.end());
 
     EXPECT_EQ(result.trees.size(), 2);
 }
@@ -154,7 +154,7 @@ TEST_F(TestJsonParser, CanReadVectorOfObjectsWithVectors)
 TEST_F(TestJsonParser, RaisesExceptionIfNonExistentPropertyIsRead)
 {
     auto json = "{\"color\": \"red\",\"size\": -25\n, \"fakeproperty\": \"asd\"}"s;
-    EXPECT_THROW(MiniJson::parse<Apple>(json.begin(), json.end()), MiniJson::UnexpectedPropertyName);
+    EXPECT_THROW(mini_json::parse<Apple>(json.begin(), json.end()), mini_json::UnexpectedPropertyName);
 }
 
 TEST_F(TestJsonParser, CanParseStreams)
@@ -170,7 +170,7 @@ TEST_F(TestJsonParser, CanParseStreams)
     auto stream = std::stringstream();
     stream << json;
 
-    auto result = MiniJson::parse<AppleTree>(stream);
+    auto result = mini_json::parse<AppleTree>(stream);
 
     ASSERT_EQ(result.apples.size(), 5);
 
@@ -192,13 +192,13 @@ TEST_F(TestJsonParser, RaisesExceptionIfCommaIsMissingInList)
 
         constexpr static auto jsonProperties()
         {
-            return std::make_tuple(MiniJson::property(&Simple::ns, "numbers"));
+            return std::make_tuple(mini_json::property(&Simple::ns, "numbers"));
         }
     };
     const auto json = "{"
                       "\"numbers\":[1 2 3 4]"
                       "}"s;
-    EXPECT_THROW(MiniJson::parse<Simple>(json.begin(), json.end()), MiniJson::ParseError);
+    EXPECT_THROW(mini_json::parse<Simple>(json.begin(), json.end()), mini_json::ParseError);
 }
 
 TEST_F(TestJsonParser, RaisesExceptionIfCommaIsMissingInDict)
@@ -210,11 +210,11 @@ TEST_F(TestJsonParser, RaisesExceptionIfCommaIsMissingInDict)
 
         constexpr static auto jsonProperties()
         {
-            return std::make_tuple(MiniJson::property(&Simple::x, "x"),
-                                   MiniJson::property(&Simple::y, "y"));
+            return std::make_tuple(mini_json::property(&Simple::x, "x"),
+                                   mini_json::property(&Simple::y, "y"));
         }
     };
     const auto json = "{\"x\": 1 \"y\": 2}"s;
-    EXPECT_THROW(MiniJson::parse<Simple>(json.begin(), json.end()), MiniJson::ParseError);
+    EXPECT_THROW(mini_json::parse<Simple>(json.begin(), json.end()), mini_json::ParseError);
 }
 }
