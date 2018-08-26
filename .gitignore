@@ -36,3 +36,5 @@ build/
 \.vs/json/v15/
 
 \.vs/
+
+Testing/Temporary/
