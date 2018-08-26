@@ -1,6 +1,7 @@
 #pragma once
 #include "p_json_error.h"
 #include "p_json_utility.h"
+#include <iomanip>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -31,7 +32,7 @@ public:
     }
     static bool is_white_space(char c)
     {
-        return c == ' ' || c == '\t' || c == '\n';
+        return c == ' ' || c == '\t' || c == '\n' || c == '\r';
     }
     static bool is_value_end(char c)
     {
@@ -66,7 +67,7 @@ template <typename FwIt> template <typename T> T ParseImpl<FwIt>::parse(Type<T>)
 {
     init<T>();
     auto result = T{};
-    std::string key {};
+    std::string key{};
     while (begin != end)
     {
         switch (state)
