@@ -12,7 +12,7 @@ struct Apple {
     std::string color = "";
     int size = 0;
 
-    constexpr static auto jsonProperties()
+    constexpr static auto json_properties()
     {
         return std::make_tuple(mini_json::property(&Apple::color, "color"),
             mini_json::property(&Apple::size, "size"));
@@ -26,7 +26,7 @@ struct AppleTree {
     std::string id = "";
     std::vector<Apple> apples = {};
 
-    constexpr static auto jsonProperties()
+    constexpr static auto json_properties()
     {
         return std::make_tuple(mini_json::property(&AppleTree::apples, "apples"),
             mini_json::property(&AppleTree::id, "id"));

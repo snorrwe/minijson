@@ -22,13 +22,13 @@ public:
     {
         stream << "{";
 
-        constexpr auto nbProperties = std::tuple_size<decltype(T::jsonProperties())>::value;
+        constexpr auto n_properties = std::tuple_size<decltype(T::json_properties())>::value;
 
         const char* separator = "";
-        for_sequence(std::make_index_sequence<nbProperties>{}, [&](auto i) {
-            constexpr auto property = std::get<i>(T::jsonProperties());
+        for_sequence(std::make_index_sequence<n_properties>{}, [&](auto i) {
+            constexpr auto property = std::get<i>(T::json_properties());
             stream << separator;
-            serialize(std::string(property.name));
+            serialize(std::string{property.name});
             stream << ":";
             serialize(item.*(property.member));
             separator = ",";
@@ -54,18 +54,22 @@ public:
     {
         stream << std::quoted(item);
     }
+
     void serialize(int item)
     {
         stream << item;
     }
-    void serialize(unsigned item)
+
+    void serialize(uint64_t item)
     {
         stream << item;
     }
+
     void serialize(float item)
     {
         stream << item;
     }
+
     void serialize(double item)
     {
         stream << item;

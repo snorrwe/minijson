@@ -247,7 +247,7 @@ template <typename FwIt> template <typename Fun> void ParseImpl<FwIt>::skip_unti
 template <typename FwIt> template <typename T> void ParseImpl<FwIt>::init()
 {
     static_assert(_private::IsJsonParseble<T>::value,
-                  "Type must specify 'jsonProperties' static member "
+                  "Type must specify 'json_properties' static member "
                   "function to be used in this context!");
     state = ParseState::Default;
     skip_until([](auto c) { return !is_white_space(c); });

@@ -42,10 +42,10 @@ constexpr auto str_equal(const char* lhs, const char* rhs)
 
 template <typename T, typename Fun> constexpr void executeByPropertyName(const char* name, Fun&& f)
 {
-    constexpr auto n_properties = std::tuple_size<decltype(T::jsonProperties())>::value;
+    constexpr auto n_properties = std::tuple_size<decltype(T::json_properties())>::value;
     auto found = false;
     for_sequence(std::make_index_sequence<n_properties>{}, [&](auto i) {
-        constexpr auto property = std::get<i>(T::jsonProperties());
+        constexpr auto property = std::get<i>(T::json_properties());
         if (str_equal(property.name, name))
         {
             found = true;
@@ -66,7 +66,7 @@ template <typename T> class IsJsonParseble
         char _[2];
     };
 
-    template <typename C> static Yes test(decltype(&C::jsonProperties));
+    template <typename C> static Yes test(decltype(&C::json_properties));
     static No test(...);
 
 public:

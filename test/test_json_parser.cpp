@@ -27,7 +27,7 @@ struct Seed
 {
     float radius = 0.0;
 
-    constexpr static auto jsonProperties()
+    constexpr static auto json_properties()
     {
         return std::make_tuple(mini_json::property(&Seed::radius, "radius"));
     }
@@ -39,7 +39,7 @@ struct Apple
     int size = 0;
     Seed seed;
 
-    constexpr static auto jsonProperties()
+    constexpr static auto json_properties()
     {
         return std::make_tuple(mini_json::property(&Apple::color, "color"),
                                mini_json::property(&Apple::seed, "seed"),
@@ -90,7 +90,7 @@ struct AppleTree
     std::string id = "";
     std::vector<Apple> apples = {};
 
-    constexpr static auto jsonProperties()
+    constexpr static auto json_properties()
     {
         return std::make_tuple(mini_json::property(&AppleTree::apples, "apples"),
                                mini_json::property(&AppleTree::id, "id"));
@@ -125,7 +125,7 @@ struct Orchid
 {
     std::vector<AppleTree> trees = {};
 
-    constexpr static auto jsonProperties()
+    constexpr static auto json_properties()
     {
         return std::make_tuple(mini_json::property(&Orchid::trees, "trees"));
     }
@@ -190,7 +190,7 @@ TEST_F(TestJsonParser, RaisesExceptionIfCommaIsMissingInList)
     {
         std::vector<int> ns;
 
-        constexpr static auto jsonProperties()
+        constexpr static auto json_properties()
         {
             return std::make_tuple(mini_json::property(&Simple::ns, "numbers"));
         }
@@ -208,7 +208,7 @@ TEST_F(TestJsonParser, RaisesExceptionIfCommaIsMissingInDict)
         int x = 0;
         int y = 0;
 
-        constexpr static auto jsonProperties()
+        constexpr static auto json_properties()
         {
             return std::make_tuple(mini_json::property(&Simple::x, "x"),
                                    mini_json::property(&Simple::y, "y"));
