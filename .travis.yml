@@ -13,7 +13,7 @@ install:
   - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 90
 
 script:
-  - cmake -H. -Bbuild -Dci=1 -Dtest=1
+  - cmake -H. -Bbuild -Dci=1 -Dtest=1 -Dcoverage=1
   - cmake --build build
   - ./build/tests
 

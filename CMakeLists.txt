@@ -3,6 +3,10 @@ project(MiniJson VERSION 0.1.0 LANGUAGES CXX)
 option(test "Build tests." OFF)
 option(ci "Enable additional error flags." OFF)
 
+if(CMAKE_COPILER_ID_GNUCC)
+    option(coverage "Enable coverage reporting for gcc/clang" OFF)
+endif()
+
 #[ library ]
 
 add_library(mini_json INTERFACE)
@@ -14,6 +18,12 @@ if(ci)
         target_compile_options(mini_json INTERFACE /W4 /WX)
     else()
         target_compile_options(mini_json INTERFACE -Wall -Wextra -pedantic -Werror)
+
+        if(coverage)
+            target_compile_options(mini_json INTERFACE --coverage -O0)
+            target_link_library(mini_json --coverage)
+        endif()
+
     endif()
 
 endif()
