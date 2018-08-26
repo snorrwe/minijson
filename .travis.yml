@@ -1,0 +1,9 @@
+language: cpp
+
+compiler:
+  - clang
+
+script:
+  - cmake -H. -Bbuild -Dci=1 -Dtest=1
+  - cmake --build build
+  - ./build/tests
