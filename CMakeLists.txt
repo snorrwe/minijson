@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.8)
 project(MiniJson VERSION 0.1.0 LANGUAGES CXX)
 option(test "Build tests." OFF)
 option(ci "Enable additional error flags." OFF)
