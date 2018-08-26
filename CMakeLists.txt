@@ -21,7 +21,6 @@ if(ci)
 
         if(coverage)
             target_compile_options(mini_json INTERFACE --coverage -O0)
-            target_link_library(mini_json --coverage)
         endif()
 
     endif()
