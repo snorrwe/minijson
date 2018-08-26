@@ -28,9 +28,9 @@ public:
         for_sequence(std::make_index_sequence<n_properties>{}, [&](auto i) {
             constexpr auto property = std::get<i>(T::json_properties());
             stream << separator;
-            serialize(std::string{property.name});
+            this->serialize(std::string{property.name});
             stream << ":";
-            serialize(item.*(property.member));
+            this->serialize(item.*(property.member));
             separator = ",";
         });
 
@@ -45,7 +45,7 @@ public:
         {
             stream << separator;
             separator = ",";
-            serialize(item);
+            this->serialize(item);
         }
         stream << "]";
     }
@@ -60,7 +60,7 @@ public:
         stream << item;
     }
 
-    void serialize(uint64_t item)
+    void serialize(size_t item)
     {
         stream << item;
     }
