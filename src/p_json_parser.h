@@ -66,7 +66,7 @@ template <typename FwIt> template <typename T> T ParseImpl<FwIt>::parse(Type<T>)
 {
     init<T>();
     auto result = T{};
-    auto key = ""s;
+    std::string key {};
     while (begin != end)
     {
         switch (state)
@@ -225,6 +225,7 @@ template <typename FwIt> template <typename TResult> TResult ParseImpl<FwIt>::pa
 
 template <typename FwIt> void ParseImpl<FwIt>::throw_unexpected_character(char chr)
 {
+    using namespace std::string_literals;
     throw ParseError("Unexpected character: ["s + chr + "] in json input!");
 }
 
