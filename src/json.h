@@ -20,8 +20,10 @@ template <typename Class, typename T> constexpr auto property(T Class::*member, 
      Parsed properties must be able to be set by the parse method
      (declare them as public)
      */
+
+template <typename T, typename FwIt>
 [[nodiscard]]
-template <typename T, typename FwIt> T parse(FwIt begin, FwIt end)
+T parse(FwIt begin, FwIt end)
 {
     static_assert(_private::IsJsonParseble<T>::value,
                   "Type must specify 'json_properties' static member "
@@ -30,8 +32,9 @@ template <typename T, typename FwIt> T parse(FwIt begin, FwIt end)
     return parser.template parse<T>(_private::Type<T>{});
 }
 
+template <typename T>
 [[nodiscard]]
-template <typename T> T parse(std::istream& stream)
+T parse(std::istream& stream)
 {
     return parse<T>(std::istream_iterator<char>(stream), std::istream_iterator<char>());
 }
