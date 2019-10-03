@@ -3,12 +3,12 @@
 [![Build Status](https://travis-ci.org/snorrwe/minijson.svg?branch=master)](https://travis-ci.org/snorrwe/minijson)
 [![codecov](https://codecov.io/gh/snorrwe/minijson/branch/master/graph/badge.svg)](https://codecov.io/gh/snorrwe/minijson)
 
-Lightweight header-only JSON library written in C++17
+Lightweight header-only JSON library written in C++17. Just include the headers and you're good to go. __MiniJSON__ is a very opinionated framework for parsing `JSON`.
+__MiniJSON__ might be a suitable for your application if your `JSON` communication has a very strict schema.
 
 ## Requirements
 
 - C++17 compatible compiler
-- CMake 3.8+ (recommended)
 
 ## Usage
 
@@ -90,4 +90,5 @@ TEST_F(TestJsonParser, CanReadJsonIntoObject)
 
 ## Limitations:
 
-__TBA__
+- `std::tuple` is not yet supported.
+- Optional fields are not supported.
