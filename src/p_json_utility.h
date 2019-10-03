@@ -70,7 +70,7 @@ template <typename T> class IsJsonParseble
     static No test(...);
 
 public:
-    constexpr bool value = sizeof(test<T>(nullptr)) == sizeof(Yes);
+    constexpr static bool value = sizeof(test<T>(nullptr)) == sizeof(Yes);
 };
 } // namespace mini_json::_private
 
