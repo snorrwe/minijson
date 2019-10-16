@@ -210,6 +210,27 @@ TEST_F(TestJsonParser, RaisesExceptionIfCommaIsMissingInList)
     EXPECT_THROW(mini_json::parse<Simple>(json.begin(), json.end()), mini_json::ParseError);
 }
 
+
+TEST_F(TestJsonParser, AcceptsSpecialCharactersInPropertyNames)
+{
+    struct Simple
+    {
+        int ns;
+
+        constexpr static auto json_properties()
+        {
+            return std::make_tuple(mini_json::property(&Simple::ns, "n:s"));
+        }
+    };
+
+    const auto json = R"({
+                      "n:s": 42
+                      })"s;
+
+    const auto simple = mini_json::parse<Simple>(json.begin(), json.end());
+    EXPECT_EQ(simple.ns, 42);
+}
+
 TEST_F(TestJsonParser, RaisesExceptionIfCommaIsMissingInDict)
 {
     struct Simple
