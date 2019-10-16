@@ -162,7 +162,7 @@ TEST_F(TestJsonParser, CanReadVectorOfObjectsWithVectors)
 
 TEST_F(TestJsonParser, RaisesExceptionIfNonExistentPropertyIsRead)
 {
-    auto json = R"a({"color": "red","size": -25n, "fakeproperty": "asd"})a"s;
+    auto json = R"a({"color": "red", "size": -25, "fakeproperty": "asd"})a"s;
     EXPECT_THROW(mini_json::parse<Apple>(json.begin(), json.end()), mini_json::UnexpectedPropertyName);
 }
 
