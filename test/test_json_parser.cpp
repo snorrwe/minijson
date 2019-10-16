@@ -55,7 +55,14 @@ protected:
 TEST_F(TestJsonParser, CanReadJsonIntoObject)
 {
     const auto json
-        = "     {\"color\":\"red\",\"size\": -25\n, \"seed\":   {\"radius\":        -3.14}}"s;
+        = R"a(
+            {
+                "color":"red",
+                "size": -25,
+                "seed": {
+                    "radius": -3.14
+                }
+            })a"s;
 
     auto result = mini_json::parse<Apple>(json.begin(), json.end());
 
@@ -66,7 +73,7 @@ TEST_F(TestJsonParser, CanReadJsonIntoObject)
 
 TEST_F(TestJsonParser, CanReadQuotes)
 {
-    const auto json = "{\"color\":\"\\\"red\\\"\",}"s;
+    const auto json = R"a({"color":"\"red\"", })a"s;
 
     auto result = mini_json::parse<Apple>(json.begin(), json.end());
 
@@ -75,13 +82,13 @@ TEST_F(TestJsonParser, CanReadQuotes)
 
 TEST_F(TestJsonParser, ThrowsParseErrorOnInvalidJson)
 {
-    auto json = "{asd \"color\": \"red\",\"size\": -25\n}"s;
+    auto json = R"a({asd "color": "red","size": -25})a"s;
     EXPECT_THROW(mini_json::parse<Apple>(json.begin(), json.end()), mini_json::ParseError);
 
-    json = "{\"color\"asd: \"red\",\"size\": -25\n}"s;
+    json = R"a({"color"asd: "red","size": -25})a"s;
     EXPECT_THROW(mini_json::parse<Apple>(json.begin(), json.end()), mini_json::ParseError);
 
-    json = "{\"color\"asd: \"red\",\"size\": -2asd5\n}"s;
+    json = R"a({"color"asd: "red","size": -2asd5})a"s;
     EXPECT_THROW(mini_json::parse<Apple>(json.begin(), json.end()), mini_json::ParseError);
 }
 
@@ -99,13 +106,15 @@ struct AppleTree
 
 TEST_F(TestJsonParser, CanReadObjectWithVectorOfObjects)
 {
-    const auto json = "{\"apples\": ["
-                      "{\"color\":\"red\",\"size\":0,\"seed\":{\"radius\":0}},"
-                      "{\"color\":\"red\",\"size\":1,\"seed\":{\"radius\":1}},"
-                      "{\"color\":\"red\",\"size\":2,\"seed\":{\"radius\":2}},"
-                      "{\"color\":\"red\",\"size\":3,\"seed\":{\"radius\":3}},"
-                      "{\"color\":\"red\",\"size\":4,\"seed\":{\"radius\":4}}"
-                      "]}"s;
+    const auto json = R"a({
+        "apples": [
+              {"color":"red","size":0,"seed":{"radius":0}},
+              {"color":"red","size":1,"seed":{"radius":1}},
+              {"color":"red","size":2,"seed":{"radius":2}},
+              {"color":"red","size":3,"seed":{"radius":3}},
+              {"color":"red","size":4,"seed":{"radius":4}}
+        ]
+    })a"s;
 
     auto result = mini_json::parse<AppleTree>(json.begin(), json.end());
 
@@ -133,18 +142,18 @@ struct Orchid
 
 TEST_F(TestJsonParser, CanReadVectorOfObjectsWithVectors)
 {
-    const auto json = "{"
-                      "\"trees\":["
-                      "  {\"id\":\"tree1\",\"apples\": ["
-                      "      {\"color\":\"red\",\"size\":0,\"seed\":{\"radius\":0}},"
-                      "      {\"color\":\"red\",\"size\":1,\"seed\":{\"radius\":1}}"
-                      "  ]},"
-                      "  {\"id\":\"tree2\",\"apples\": ["
-                      "      {\"color\":\"red\",\"size\":0,\"seed\":{\"radius\":0}},"
-                      "      {\"color\":\"red\",\"size\":1,\"seed\":{\"radius\":1}}"
-                      "  ]}"
-                      " ]"
-                      "}"s;
+    const auto json = R"a({
+                      "trees":[
+                        {"id":"tree1","apples": [
+                            {"color":"red","size":0,"seed":{"radius":0}},
+                            {"color":"red","size":1,"seed":{"radius":1}}
+                        ]},
+                        {"id":"tree2","apples": [
+                            {"color":"red","size":0,"seed":{"radius":0}},
+                            {"color":"red","size":1,"seed":{"radius":1}}
+                        ]}
+                       ]
+                      })a"s;
 
     auto result = mini_json::parse<Orchid>(json.begin(), json.end());
 
@@ -153,7 +162,7 @@ TEST_F(TestJsonParser, CanReadVectorOfObjectsWithVectors)
 
 TEST_F(TestJsonParser, RaisesExceptionIfNonExistentPropertyIsRead)
 {
-    auto json = "{\"color\": \"red\",\"size\": -25\n, \"fakeproperty\": \"asd\"}"s;
+    auto json = R"a({"color": "red","size": -25n, "fakeproperty": "asd"})a"s;
     EXPECT_THROW(mini_json::parse<Apple>(json.begin(), json.end()), mini_json::UnexpectedPropertyName);
 }
 
